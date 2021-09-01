@@ -25,13 +25,16 @@ class Chart extends StatelessWidget {
         }
       }
 
-      print(DateFormat.E().format(weekDay)[0]);
-      print(totalSum);
-
       return {
         'day': DateFormat.E().format(weekDay)[0],
         'value': totalSum,
       };
+    }).reversed.toList();
+  }
+
+  double get _weekTotalValue {
+    return groupedTransactions.fold(0, (sum, transaction) {
+      return sum + (double.tryParse(transaction['value'].toString()) ?? 0);
     });
   }
 
@@ -45,10 +48,15 @@ class Chart extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: groupedTransactions.map((element) {
-            return ChartBar(
-              label: element['day'].toString(),
-              value: double.tryParse(element['value'].toString()) ?? 0,
-              percentage: 0.5,
+            return Flexible(
+              fit: FlexFit.tight,
+              child: ChartBar(
+                label: element['day'].toString(),
+                value: double.tryParse(element['value'].toString()) ?? 0,
+                percentage: _weekTotalValue == 0 
+                  ? 0 
+                  : (double.tryParse(element['value'].toString()) ?? 0) / _weekTotalValue,
+              ),
             );
           }).toList(),
         ),
