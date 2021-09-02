@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
+import 'adaptative_button.dart';
+import 'adaptative_textfield.dart';
+import 'adaptative_datepicker.dart';
 
 class TransactionForm extends StatefulWidget {
   final void Function(String, double, DateTime) addTransaction;
@@ -21,86 +24,60 @@ class _TransactionFormState extends State<TransactionForm> {
       final text = _titleController.text;
       final doubleValue = double.tryParse(_valueController.text) ?? 0;
 
-      if(text.isEmpty || doubleValue <= 0) {
+      if (text.isEmpty || doubleValue <= 0) {
         return;
       }
 
       widget.addTransaction(text, doubleValue, _selectedDate);
     }
 
-    _showDatePicker() {
-      showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2019),
-        lastDate: DateTime.now(),
-      ).then((value) {
-        if (value == null) {
-          return;
-        }
-        setState(() {
-          _selectedDate = value;
-        });
+    _onDateChanged(DateTime value) {
+      setState(() {
+        _selectedDate = value;
       });
     }
 
-    return Card(
-        elevation: 6,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              TextField(
-                controller: _titleController,
-                decoration: InputDecoration(
-                  labelText: 'Título',
+    return SingleChildScrollView(
+      child: Card(
+          elevation: 6,
+          child: Padding(
+            padding: EdgeInsets.only(
+              top: 10,
+              bottom: 10 + MediaQuery.of(context).viewInsets.bottom,
+              left: 10,
+              right: 10,
+            ),
+            child: Column(
+              children: [
+                AdaptativeTextField(
+                  label: 'Título',
+                  controller: _titleController,
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.name,
                 ),
-                keyboardType: TextInputType.name,
-                textInputAction: TextInputAction.next,
-              ),
-              TextField(
-                controller: _valueController,
-                decoration: InputDecoration(
-                  labelText: 'Valor (R\$)',
+                AdaptativeTextField(
+                  label: 'Valor (R\$)',
+                  controller: _valueController,
+                  textInputAction: TextInputAction.done,
+                  keyboardType: TextInputType.numberWithOptions(
+                      decimal: true, signed: false),
                 ),
-                keyboardType: TextInputType.numberWithOptions(decimal: true, signed: false),
-                textInputAction: TextInputAction.done,
-              ),
-              Container(
-                height: 70,
-                child: Row(
+                AdaptativeDatePicker(
+                  selectedDate: _selectedDate,
+                  onDateChanged: _onDateChanged,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(DateFormat('dd/MM/yyyy').format(_selectedDate)),
-                    TextButton(
-                      onPressed: _showDatePicker,
-                      child: Text(
-                        'Selecionar data',
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    )
-                  ]
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ElevatedButton(
-                    onPressed: () => _submitForm(),
-                    child: Text(
-                      'Nova Transação',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
+                    AdaptativeButton(
+                      label: 'Nova Transação',
+                      onPressed: () => _submitForm(),
                     ),
-                    style: TextButton.styleFrom(primary: Theme.of(context).primaryColor),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ));
+                  ],
+                )
+              ],
+            ),
+          )),
+    );
   }
 }
