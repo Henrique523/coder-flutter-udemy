@@ -33,7 +33,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   final List<Transaction> _transactions = [
     Transaction(
       id: 't0',
@@ -73,6 +73,23 @@ class _MyHomePageState extends State<MyHomePage> {
     )
   ];
   bool _showChart = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print(state);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance!.removeObserver(this);
+  }
 
   List<Transaction> get _recentTransactions {
     return _transactions.where((element) {
@@ -138,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         IconButton(
           onPressed: () => _openTransactionFormModal(context),
-          icon: Icon(Icons.add),
+          icon: const Icon(Icons.add),
           color: Colors.white,
         ),
       ],
@@ -223,7 +240,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ? CupertinoPageScaffold(
             child: bodyPage,
             navigationBar: CupertinoNavigationBar(
-                middle: Text('Exibir gráfico.'),
+                middle: const Text('Exibir gráfico.'),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: actions,
@@ -235,7 +252,7 @@ class _MyHomePageState extends State<MyHomePage> {
             floatingActionButton: Platform.isIOS
                 ? Container()
                 : FloatingActionButton(
-                    child: Icon(Icons.add),
+                    child: const Icon(Icons.add),
                     onPressed: () => _openTransactionFormModal(context),
                   ),
             floatingActionButtonLocation:

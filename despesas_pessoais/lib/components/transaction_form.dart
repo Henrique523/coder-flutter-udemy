@@ -59,7 +59,7 @@ class _TransactionFormState extends State<TransactionForm> {
                   label: 'Valor (R\$)',
                   controller: _valueController,
                   textInputAction: TextInputAction.done,
-                  keyboardType: TextInputType.numberWithOptions(
+                  keyboardType: const TextInputType.numberWithOptions(
                       decimal: true, signed: false),
                 ),
                 AdaptativeDatePicker(

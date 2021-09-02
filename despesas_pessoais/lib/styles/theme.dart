@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 var themeData = ThemeData(
-  primarySwatch: Colors.purple,
-  accentColor: Colors.amber,
+  primarySwatch: Colors.blue,
+  accentColor: Colors.green,
   fontFamily: 'OpenSans',
   textTheme: ThemeData.light().textTheme.copyWith(
     headline6: TextStyle(
