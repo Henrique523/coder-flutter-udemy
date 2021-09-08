@@ -49,9 +49,7 @@ class MealDetailScreen extends StatelessWidget {
             ),
             SingleChildScrollView(
               child: Column(
-                children: [
-                  
-                ],
+                children: [],
               ),
             ),
             _createSectionTitle(context, 'Ingredientes'),
@@ -90,6 +88,14 @@ class MealDetailScreen extends StatelessWidget {
             )),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(
+          Icons.star_border,
+        ),
+        onPressed: () {
+          Navigator.of(context).pop(meal.title);
+        },
       ),
     );
   }
