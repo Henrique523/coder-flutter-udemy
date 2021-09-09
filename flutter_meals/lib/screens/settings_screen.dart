@@ -17,7 +17,7 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  late Settings settings;
+  Settings settings = Settings();
 
   @override
   void initState() {

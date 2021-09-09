@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_meals/models/meal.dart';
 
 class MealDetailScreen extends StatelessWidget {
+  final void Function(Meal) toggleFavorite;
+  final bool Function(Meal) isFavorite;
+
+  MealDetailScreen(this.toggleFavorite, this.isFavorite);
+
   Widget _createSectionTitle(BuildContext context, String title) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -42,9 +47,12 @@ class MealDetailScreen extends StatelessWidget {
             Container(
               height: 300,
               width: double.infinity,
-              child: Image.network(
-                meal.imageUrl,
-                fit: BoxFit.cover,
+              child: Hero(
+                tag: "meal-image-${meal.id}",
+                child: Image.network(
+                  meal.imageUrl,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             SingleChildScrollView(
@@ -90,11 +98,9 @@ class MealDetailScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(
-          Icons.star_border,
-        ),
+        child: Icon(isFavorite(meal) ? Icons.star : Icons.star_border),
         onPressed: () {
-          Navigator.of(context).pop(meal.title);
+          toggleFavorite(meal);
         },
       ),
     );
