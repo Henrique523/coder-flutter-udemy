@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'models/product_overview_page.dart';
+import 'pages/product_overview_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,8 +12,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.purple,
+        accentColor: Colors.deepOrange,
+        fontFamily: 'Lato',
       ),
       home: ProductsOverviewPage(),
       debugShowCheckedModeBanner: false,
