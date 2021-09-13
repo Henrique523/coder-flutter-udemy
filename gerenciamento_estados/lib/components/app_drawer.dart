@@ -12,7 +12,6 @@ class AppDrawer extends StatelessWidget {
             automaticallyImplyLeading: false,
             centerTitle: true,
           ),
-          const Divider(),
           ListTile(
               leading: const Icon(Icons.shop),
               title: const Text('Loja'),
@@ -34,6 +33,7 @@ class AppDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).pushReplacementNamed(AppRoutes.PRODUCTS);
               }),
+          const Divider(),
         ],
       ),
     );
