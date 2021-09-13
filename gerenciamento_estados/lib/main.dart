@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciamento_estados/pages/cart_page.dart';
 import 'package:gerenciamento_estados/pages/orders_page.dart';
+import 'package:gerenciamento_estados/pages/product_form_page.dart';
+import 'package:gerenciamento_estados/pages/products_page.dart';
 import 'package:gerenciamento_estados/providers/order_list.dart';
 import 'package:provider/provider.dart';
 
@@ -38,6 +40,8 @@ class MyApp extends StatelessWidget {
           AppRoutes.PRODUCT_DETAIL: (ctx) => ProductDetailPage(),
           AppRoutes.CART: (ctx) => CartPage(),
           AppRoutes.ORDERS: (ctx) => OrdersPage(),
+          AppRoutes.PRODUCTS: (ctx) => ProductsPage(),
+          AppRoutes.PRODUCT_FORM: (ctx) => ProductFormPage(),
           // AppRoutes.PRODUCT_DETAIL: (ctx) => CounterPage(),
         },
       ),
