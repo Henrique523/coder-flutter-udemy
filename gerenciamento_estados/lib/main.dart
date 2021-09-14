@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:gerenciamento_estados/pages/auth_page.dart';
 import 'package:gerenciamento_estados/pages/cart_page.dart';
 import 'package:gerenciamento_estados/pages/orders_page.dart';
 import 'package:gerenciamento_estados/pages/product_form_page.dart';
 import 'package:gerenciamento_estados/pages/products_page.dart';
+import 'package:gerenciamento_estados/providers/auth.dart';
 import 'package:gerenciamento_estados/providers/order_list.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => Auth()),
         ChangeNotifierProvider(create: (_) => ProductList()),
         ChangeNotifierProvider(create: (_) => Cart()),
         ChangeNotifierProvider(create: (_) => OrderList()),
@@ -36,6 +39,7 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         routes: {
+          AppRoutes.AUTH: (ctx) => AuthPage(),
           AppRoutes.PRODUCT_OVERVIEW: (ctx) => ProductsOverviewPage(),
           AppRoutes.PRODUCT_DETAIL: (ctx) => ProductDetailPage(),
           AppRoutes.CART: (ctx) => CartPage(),
