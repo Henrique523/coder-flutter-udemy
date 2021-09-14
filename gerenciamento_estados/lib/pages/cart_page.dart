@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gerenciamento_estados/components/cart_button.dart';
 import 'package:gerenciamento_estados/components/cart_item_component.dart';
 import 'package:gerenciamento_estados/providers/cart.dart';
 import 'package:gerenciamento_estados/providers/order_list.dart';
@@ -47,22 +48,7 @@ class CartPage extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  TextButton(
-                    onPressed: () {
-                      Provider.of<OrderList>(
-                        context,
-                        listen: false,
-                      ).addOrder(cart);
-
-                      cart.clear();
-                    },
-                    child: const Text('Comprar'),
-                    style: TextButton.styleFrom(
-                      textStyle: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                  ),
+                  CartButton(cart: cart),
                 ],
               ),
             ),

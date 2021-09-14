@@ -18,10 +18,10 @@ class Product with ChangeNotifier {
     this.isFavorite = false,
   });
 
-  void toggleFavorite() {
-    isFavorite = !isFavorite;
-    notifyListeners();
-  }
+  // void toggleFavorite() {
+  //   isFavorite = !isFavorite;
+  //   notifyListeners();
+  // }
 
 
 }

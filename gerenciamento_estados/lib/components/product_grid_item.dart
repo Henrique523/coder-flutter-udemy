@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciamento_estados/providers/cart.dart';
+import 'package:gerenciamento_estados/providers/product_list.dart';
 import 'package:gerenciamento_estados/utils/app_routes.dart';
 import 'package:provider/provider.dart';
 
@@ -32,9 +33,25 @@ class ProductGridItem extends StatelessWidget {
             backgroundColor: Colors.black54,
             leading: Consumer<Product>(
               builder: (ctx, product, _) => IconButton(
-                onPressed: () {
-                  product.toggleFavorite();
-                },
+                onPressed: () => Provider.of<ProductList>(
+                  context,
+                  listen: false,
+                ).toggleFavorite(product).catchError((error) {
+                  return showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: const Text('Ocorreu um erro!'),
+                      content: Text(
+                          'Não foi possível atalizar o produto ${product.name}'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text('Ok'),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
                 icon: Icon(
                   product.isFavorite ? Icons.favorite : Icons.favorite_border,
                 ),

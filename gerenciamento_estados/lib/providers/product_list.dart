@@ -3,13 +3,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:gerenciamento_estados/exceptions/http_exception.dart';
+import 'package:gerenciamento_estados/utils/constants.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/product.dart';
 
 class ProductList with ChangeNotifier {
-  final _baseUrl =
-      'https://shop-cod3r-4be92-default-rtdb.firebaseio.com/products';
   List<Product> _products = [];
   // bool _showFavoriteOnly = false;
 
@@ -25,7 +24,7 @@ class ProductList with ChangeNotifier {
     _products.clear();
 
     final response = await http.get(
-      Uri.parse('$_baseUrl.json'),
+      Uri.parse('${Constants.PRODUCT_BASE_URL}.json'),
     );
     if (response.body == 'null') return;
 
@@ -57,7 +56,7 @@ class ProductList with ChangeNotifier {
 
   Future<void> addProduct(Product product) async {
     final response = await http.post(
-      Uri.parse('$_baseUrl.json'),
+      Uri.parse('${Constants.PRODUCT_BASE_URL}.json'),
       body: jsonEncode({
         "name": product.name,
         "description": product.description,
@@ -86,7 +85,7 @@ class ProductList with ChangeNotifier {
 
     if (index >= 0) {
       await http.patch(
-        Uri.parse('$_baseUrl/${product.id}.json'),
+        Uri.parse('${Constants.PRODUCT_BASE_URL}/${product.id}.json'),
         body: jsonEncode(
           {
             "name": product.name,
@@ -111,7 +110,7 @@ class ProductList with ChangeNotifier {
       notifyListeners();
 
       final response = await http.delete(
-        Uri.parse('$_baseUrl/${product.id}.json'),
+        Uri.parse('${Constants.PRODUCT_BASE_URL}/${product.id}.json'),
       );
 
       if (response.statusCode >= 400) {
@@ -140,6 +139,38 @@ class ProductList with ChangeNotifier {
       return updateProduct(product);
     } else {
       return addProduct(product);
+    }
+  }
+
+  Future<void> toggleFavorite(Product product) async {
+    int index = _products.indexWhere((prod) => prod.id == product.id);
+
+    if (index >= 0) {
+      final toggleFavoriteProduct = product;
+      toggleFavoriteProduct.isFavorite = !toggleFavoriteProduct.isFavorite;
+
+      _products.removeAt(index);
+      _products.insert(index, toggleFavoriteProduct);
+      
+      notifyListeners();
+
+      final response = await http.patch(
+        Uri.parse('${Constants.PRODUCT_BASE_URL}/${product.id}.json'),
+        body: jsonEncode({ "isFavorite": product.isFavorite }),
+      );
+
+      if (response.statusCode >= 400) {
+        toggleFavoriteProduct.isFavorite = !toggleFavoriteProduct.isFavorite;
+        _products.removeAt(index);
+        _products.insert(index, toggleFavoriteProduct);
+        
+        notifyListeners();
+
+        throw HttpException(
+          msg: 'Não foi possível atualizar o produto!',
+          statusCode: response.statusCode,
+        );
+      }
     }
   }
 }
