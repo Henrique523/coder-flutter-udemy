@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gerenciamento_estados/pages/orders_page.dart';
 import 'package:gerenciamento_estados/providers/auth.dart';
 import 'package:gerenciamento_estados/utils/app_routes.dart';
+import 'package:gerenciamento_estados/utils/custom_route.dart';
 import 'package:provider/provider.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -26,6 +28,9 @@ class AppDrawer extends StatelessWidget {
               leading: const Icon(Icons.payment),
               title: const Text('Pedidos'),
               onTap: () {
+                // Navigator.of(context).pushReplacement(
+                //   CustomRoute(builder: (ctx) => OrdersPage()),
+                // );
                 Navigator.of(context).pushReplacementNamed(AppRoutes.ORDERS);
               }),
           const Divider(),

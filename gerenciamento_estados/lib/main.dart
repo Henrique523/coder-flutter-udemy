@@ -7,6 +7,7 @@ import 'package:gerenciamento_estados/pages/product_form_page.dart';
 import 'package:gerenciamento_estados/pages/products_page.dart';
 import 'package:gerenciamento_estados/providers/auth.dart';
 import 'package:gerenciamento_estados/providers/order_list.dart';
+import 'package:gerenciamento_estados/utils/custom_route.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/cart.dart';
@@ -51,6 +52,12 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.purple,
           accentColor: Colors.deepOrange,
           fontFamily: 'Lato',
+          pageTransitionsTheme: PageTransitionsTheme(
+            builders: {
+              TargetPlatform.iOS: CustomPageTransitionsBuilder(),
+              TargetPlatform.android: CustomPageTransitionsBuilder(),
+            }
+          ),
         ),
         debugShowCheckedModeBanner: false,
         routes: {

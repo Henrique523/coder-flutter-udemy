@@ -16,33 +16,37 @@ class OrderComponent extends StatefulWidget {
 }
 
 class _OrderComponentState extends State<OrderComponent> {
-  bool expanded = false;
-
+  bool _expanded = false;
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        children: [
-          ListTile(
-            title: Text('R\$ ${widget.order.total.toStringAsFixed(2)}'),
-            subtitle:
-                Text(DateFormat('dd/MM/yyyy hh:mm').format(widget.order.date)),
-            trailing: IconButton(
-              icon: Icon(expanded ? Icons.expand_less : Icons.expand_more),
-              onPressed: () {
-                setState(() {
-                  expanded = !expanded;
-                });
-              },
+    final itemsHeight = (widget.order.products.length * 25.0) + 10;
+
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 400),
+      height: _expanded ? itemsHeight + 80 : 80,
+      child: Card(
+        child: Column(
+          children: [
+            ListTile(
+              title: Text('R\$ ${widget.order.total.toStringAsFixed(2)}'),
+              subtitle: Text(
+                  DateFormat('dd/MM/yyyy hh:mm').format(widget.order.date)),
+              trailing: IconButton(
+                icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
+                onPressed: () {
+                  setState(() {
+                    _expanded = !_expanded;
+                  });
+                },
+              ),
             ),
-          ),
-          if (expanded)
-            Container(
+            AnimatedContainer(
+              duration: Duration(milliseconds: 400),
+              height: _expanded ? itemsHeight : 0,
               padding: const EdgeInsets.symmetric(
                 horizontal: 15,
                 vertical: 4,
               ),
-              height: (widget.order.products.length * 25.0) + 10,
               child: ListView(
                   children: widget.order.products.map((product) {
                 return Row(
@@ -64,7 +68,8 @@ class _OrderComponentState extends State<OrderComponent> {
                 );
               }).toList()),
             ),
-        ],
+          ],
+        ),
       ),
     );
   }
