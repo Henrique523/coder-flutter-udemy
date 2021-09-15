@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gerenciamento_estados/pages/auth_or_home_page.dart';
 import 'package:gerenciamento_estados/pages/auth_page.dart';
 import 'package:gerenciamento_estados/pages/cart_page.dart';
 import 'package:gerenciamento_estados/pages/orders_page.dart';
@@ -26,9 +27,23 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => Auth()),
-        ChangeNotifierProvider(create: (_) => ProductList()),
+        ChangeNotifierProxyProvider<Auth, ProductList>(
+          create: (_) => ProductList(),
+          update: (ctx, auth, previous) => ProductList(
+            auth.token ?? '',
+            auth.userId ?? '',
+            previous?.products ?? [],
+          ),
+        ),
         ChangeNotifierProvider(create: (_) => Cart()),
-        ChangeNotifierProvider(create: (_) => OrderList()),
+        ChangeNotifierProxyProvider<Auth, OrderList>(
+          create: (_) => OrderList(),
+          update: (ctx, auth, previous) => OrderList(
+            auth.token ?? '',
+            auth.userId ?? '',
+            previous?.items ?? [],
+          ),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -39,8 +54,7 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         routes: {
-          AppRoutes.AUTH: (ctx) => AuthPage(),
-          AppRoutes.PRODUCT_OVERVIEW: (ctx) => ProductsOverviewPage(),
+          AppRoutes.AUTH_OR_HOME: (ctx) => AuthOrHomePage(),
           AppRoutes.PRODUCT_DETAIL: (ctx) => ProductDetailPage(),
           AppRoutes.CART: (ctx) => CartPage(),
           AppRoutes.ORDERS: (ctx) => OrdersPage(),

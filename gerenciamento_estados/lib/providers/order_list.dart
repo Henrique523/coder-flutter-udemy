@@ -9,7 +9,15 @@ import 'package:gerenciamento_estados/utils/constants.dart';
 import 'package:http/http.dart' as http;
 
 class OrderList extends ChangeNotifier {
+  final String _token;
+  final String _userId;
   List<Order> _items = [];
+
+  OrderList([
+    this._token = '',
+    this._userId = '',
+    this._items = const [],
+  ]);
 
   List<Order> get items {
     return [..._items];
@@ -20,17 +28,17 @@ class OrderList extends ChangeNotifier {
   }
 
   Future<void> loadOrders() async {
-    _items.clear();
+    List<Order> items = [];
 
     final response = await http.get(
-      Uri.parse('${Constants.ORDER_BASE_URL}.json'),
+      Uri.parse('${Constants.USER_ORDERS_BASE_URL}/$_userId.json?auth=$_token'),
     );
 
     if (response.body == 'null') return;
 
     Map<String, dynamic> data = jsonDecode(response.body);
     data.forEach((orderId, orderData) {
-      _items.add(
+      items.add(
         Order(
           id: orderId,
           total: orderData['total'],
@@ -47,38 +55,46 @@ class OrderList extends ChangeNotifier {
         ),
       );
     });
+
+    _items.reversed.toList();
+
     notifyListeners();
   }
 
   Future<void> addOrder(Cart cart) async {
     final date = DateTime.now();
-    final response = await http.post(
-      Uri.parse('${Constants.ORDER_BASE_URL}.json'),
-      body: jsonEncode({
-        "total": cart.totalAmount,
-        "date": date.toIso8601String(),
-        "products": cart.items.values
-            .map((cartItem) => {
+    final String orderId = Random().nextDouble().toString();
+
+    await http.post(
+      Uri.parse('${Constants.USER_ORDERS_BASE_URL}/$_userId.json?auth=$_token'),
+      body: jsonEncode(
+        {
+          "total": cart.totalAmount,
+          "date": date.toIso8601String(),
+          "products": cart.items.values
+              .map(
+                (cartItem) => {
                   "id": cartItem.id,
                   "productId": cartItem.productId,
                   "name": cartItem.name,
                   "quantity": cartItem.quantity,
                   "price": cartItem.price,
-                })
-            .toList(),
-      }),
+                },
+              )
+              .toList(),
+        },
+      ),
     );
 
-    final id = jsonDecode(response.body)['name'];
-
     _items.insert(
-        0,
-        Order(
-          id: Random().nextDouble().toString(),
-          date: date,
-          total: cart.totalAmount,
-          products: cart.items.values.toList(),
-        ));
+      0,
+      Order(
+        id: orderId,
+        date: date,
+        total: cart.totalAmount,
+        products: cart.items.values.toList(),
+      ),
+    );
     notifyListeners();
   }
 }
