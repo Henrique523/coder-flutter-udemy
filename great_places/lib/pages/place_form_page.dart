@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:great_places/components/image_input.dart';
+import 'package:great_places/components/location_input.dart';
 import 'package:great_places/providers/great_places.dart';
 import 'package:provider/provider.dart';
 
@@ -54,6 +55,8 @@ class _PlaceFormPageState extends State<PlaceFormPage> {
                   ),
                   const SizedBox(height: 10),
                   ImageInput(this._selectImage),
+                  const SizedBox(height: 10),
+                  LocationInput(),
                 ],
               ),
             ),
