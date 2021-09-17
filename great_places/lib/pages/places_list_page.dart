@@ -24,26 +24,35 @@ class PlacesListPage extends StatelessWidget {
           context,
           listen: false,
         ).loadPlaces(),
-        builder: (ctx, snapshot) => snapshot.connectionState == ConnectionState.waiting
-          ? Center(child: CircularProgressIndicator())
-          : Consumer<GreatPlaces>(
-          child: Center(
-            child: const Text('Nenhum local cadastrado!'),
-          ),
-          builder: (ctx, greatPlaces, child) => greatPlaces.itemsCount == 0
-              ? child!
-              : ListView.builder(
-                  itemCount: greatPlaces.itemsCount,
-                  itemBuilder: (ctx, index) => ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage:
-                          FileImage(greatPlaces.itemByIndex(index).image),
-                    ),
-                    title: Text(greatPlaces.itemByIndex(index).title),
-                    onTap: () {},
-                  ),
+        builder: (ctx, snapshot) => snapshot.connectionState ==
+                ConnectionState.waiting
+            ? Center(child: CircularProgressIndicator())
+            : Consumer<GreatPlaces>(
+                child: Center(
+                  child: const Text('Nenhum local cadastrado!'),
                 ),
-        ),
+                builder: (ctx, greatPlaces, child) => greatPlaces.itemsCount ==
+                        0
+                    ? child!
+                    : ListView.builder(
+                        itemCount: greatPlaces.itemsCount,
+                        itemBuilder: (ctx, index) => ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage:
+                                FileImage(greatPlaces.itemByIndex(index).image),
+                          ),
+                          title: Text(greatPlaces.itemByIndex(index).title),
+                          subtitle: Text(
+                              greatPlaces.itemByIndex(index).location.address),
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                              AppRoutes.PLACE_DETAIL,
+                              arguments: greatPlaces.itemByIndex(index),
+                            );
+                          },
+                        ),
+                      ),
+              ),
       ),
     );
   }
