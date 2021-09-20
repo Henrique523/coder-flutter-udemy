@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:chat_firebase/components/user_image_picker.dart';
-import 'package:chat_firebase/models/auth_form_data.dart';
+import 'package:chat_firebase/core/models/auth_form_data.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
