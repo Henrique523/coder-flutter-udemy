@@ -30,7 +30,7 @@ class AuthMockService implements AuthService {
     return _userStream;
   }
 
-  Future<void> signup(String nome, String email, File? image) async {
+  Future<void> signup(String nome, String email, String password, File? image) async {
     final newUser = ChatUser(
       id: Random().nextDouble().toString(),
       name: nome,

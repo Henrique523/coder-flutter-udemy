@@ -18,7 +18,7 @@ class ChatMockService implements ChatService {
     return _msgsStream;
   }
 
-  Future<ChatMessage> save(String text, ChatUser user) async {
+  Future<ChatMessage?> save(String text, ChatUser user) async {
     final _newMessage = ChatMessage(
       id: Random().nextDouble().toString(),
       text: text,
