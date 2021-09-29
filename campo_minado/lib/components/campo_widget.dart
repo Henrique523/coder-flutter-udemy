@@ -14,6 +14,8 @@ class CampoWidget extends StatelessWidget {
   });
 
   Widget _getImage() {
+    int qtdeMinas = campo.qtdeMinasNaVizinhanca;
+
     if (campo.aberto && campo.minado && campo.explodido) {
       return Image.asset('assets/images/bomba_0.jpeg');
     }
@@ -26,36 +28,12 @@ class CampoWidget extends StatelessWidget {
       return Image.asset('assets/images/aberto_0.jpeg');
     }
 
-    if (campo.aberto && ! campo.minado && ! campo.explodido && campo.qtdeMinasNaVizinhanca == 1) {
-      return Image.asset('assets/images/aberto_1.jpeg');
+    if (campo.aberto && ! campo.minado && ! campo.explodido && campo.qtdeMinasNaVizinhanca > 0) {
+      return Image.asset('assets/images/aberto_$qtdeMinas.jpeg');
     }
 
-    if (campo.aberto && ! campo.minado && ! campo.explodido && campo.qtdeMinasNaVizinhanca == 2) {
-      return Image.asset('assets/images/aberto_2.jpeg');
-    }
-
-    if (campo.aberto && ! campo.minado && ! campo.explodido && campo.qtdeMinasNaVizinhanca == 3) {
-      return Image.asset('assets/images/aberto_3.jpeg');
-    }
-
-    if (campo.aberto && ! campo.minado && ! campo.explodido && campo.qtdeMinasNaVizinhanca == 4) {
-      return Image.asset('assets/images/aberto_4.jpeg');
-    }
-
-    if (campo.aberto && ! campo.minado && ! campo.explodido && campo.qtdeMinasNaVizinhanca == 5) {
-      return Image.asset('assets/images/aberto_5.jpeg');
-    }
-
-    if (campo.aberto && ! campo.minado && ! campo.explodido && campo.qtdeMinasNaVizinhanca == 6) {
-      return Image.asset('assets/images/aberto_6.jpeg');
-    }
-
-    if (campo.aberto && ! campo.minado && ! campo.explodido && campo.qtdeMinasNaVizinhanca == 7) {
-      return Image.asset('assets/images/aberto_7.jpeg');
-    }
-
-    if (campo.aberto && ! campo.minado && ! campo.explodido && campo.qtdeMinasNaVizinhanca == 8) {
-      return Image.asset('assets/images/aberto_8.jpeg');
+    if (campo.marcado) {
+      return Image.asset('assets/images/bandeira.jpeg');
     }
 
     return Image.asset('assets/images/fechado.jpeg');
