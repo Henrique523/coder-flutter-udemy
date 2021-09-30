@@ -15,26 +15,60 @@ class CampoMinadoApp extends StatefulWidget {
 
 class _CampoMinadoAppState extends State<CampoMinadoApp> {
   bool? _venceu;
-  Tabuleiro _tabuleiro = Tabuleiro(
-    linhas: 10,
-    colunas: 10,
-    qtdeBombas: 3,
-  );
+  Tabuleiro? _tabuleiro;
 
   void _reiniciar() {
-    print('Reiniciado');
+    setState(() {
+      _venceu = null;
+      _tabuleiro!.reiniciar();
+    });
   }
 
   void _abrir(Campo campo) {
+    if (_venceu != null) {
+      return;
+    }
+
     setState(() {
-      campo.abrir();
+      try {
+        campo.abrir();
+        if (_tabuleiro!.resolvido) {
+          _venceu = true;
+        }
+      } on ExplosaoException {
+        _venceu = false;
+        _tabuleiro!.revelarBombas();
+      }
     });
   }
 
   void _alternarMarcacao(Campo campo) {
+    if (_venceu != null) {
+      return;
+    }
+
     setState(() {
       campo.alternarMarcacao();
+      if (_tabuleiro!.resolvido) {
+        _venceu = true;
+      }
     });
+  }
+
+  Tabuleiro _getTabuleiro(double largura, double altura) {
+    if (_tabuleiro == null) {
+      int qtdeColunas = 15;
+      double tamanhoCampo = largura / qtdeColunas;
+      int qtdeLinhas = (altura / tamanhoCampo).floor();
+
+      _tabuleiro = Tabuleiro(
+        linhas: qtdeLinhas,
+        colunas: qtdeColunas,
+        qtdeBombas: 3,
+      );
+    }
+
+    return _tabuleiro!;
   }
 
   @override
@@ -46,10 +80,15 @@ class _CampoMinadoAppState extends State<CampoMinadoApp> {
           venceu: _venceu,
         ),
         body: Container(
-          child: TabuleiroWidget(
-            onAbrir: _abrir,
-            onAlternarMarcacao: _alternarMarcacao,
-            tabuleiro: _tabuleiro,
+          child: LayoutBuilder(
+            builder: (ctx, constraints) {
+              return TabuleiroWidget(
+                onAbrir: _abrir,
+                onAlternarMarcacao: _alternarMarcacao,
+                tabuleiro:
+                    _getTabuleiro(constraints.maxWidth, constraints.maxHeight),
+              );
+            },
           ),
         ),
       ),
